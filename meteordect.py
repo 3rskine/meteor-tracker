@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
+#python meteordect.py --videos 影片名稱.mp4(須和該程式同一資料夾)
 """
 光軌增強版流星偵測系統 - 進階優化版
 新增功能：
