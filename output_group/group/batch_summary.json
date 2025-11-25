@@ -1,0 +1,54 @@
+{
+  "total_videos": 5,
+  "success_count": 5,
+  "failed_count": 0,
+  "total_meteors": 15,
+  "total_time_seconds": 10.705129,
+  "results": [
+    {
+      "video_name": "1.avi",
+      "video_path": "group\\1.avi",
+      "output_folder": "output_batch\\group\\1",
+      "meteor_count": 1,
+      "processing_time_seconds": 2.087865,
+      "status": "success",
+      "timestamp": "2025-11-26T00:51:32.400860"
+    },
+    {
+      "video_name": "2.avi",
+      "video_path": "group\\2.avi",
+      "output_folder": "output_batch\\group\\2",
+      "meteor_count": 3,
+      "processing_time_seconds": 2.05892,
+      "status": "success",
+      "timestamp": "2025-11-26T00:51:34.504775"
+    },
+    {
+      "video_name": "3.avi",
+      "video_path": "group\\3.avi",
+      "output_folder": "output_batch\\group\\3",
+      "meteor_count": 1,
+      "processing_time_seconds": 2.205938,
+      "status": "success",
+      "timestamp": "2025-11-26T00:51:36.579457"
+    },
+    {
+      "video_name": "4.avi",
+      "video_path": "group\\4.avi",
+      "output_folder": "output_batch\\group\\4",
+      "meteor_count": 1,
+      "processing_time_seconds": 1.884289,
+      "status": "success",
+      "timestamp": "2025-11-26T00:51:38.807889"
+    },
+    {
+      "video_name": "5.avi",
+      "video_path": "group\\5.avi",
+      "output_folder": "output_batch\\group\\5",
+      "meteor_count": 9,
+      "processing_time_seconds": 2.388728,
+      "status": "success",
+      "timestamp": "2025-11-26T00:51:40.706881"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "total_rejected": 12,
+  "rejection_reasons": {
+    "靜止點 (1.0px)": 1,
+    "靜止點 (1.4px)": 1,
+    "速度異常 (0.9px/f)": 1,
+    "靜止點 (0.0px)": 1,
+    "速度異常 (0.3px/f)": 1,
+    "持續時間太短 (2幀 < 3幀)": 4,
+    "速度異常 (0.7px/f)": 1,
+    "速度異常 (0.5px/f)": 2
+  },
+  "sample_tracks": [],
+  "samples_by_reason": {
+    "靜止點 (1.0px)": [
+      {
+        "track_id": 1,
+        "start_frame": 2,
+        "duration": 6,
+        "quality_score": 0
+      }
+    ],
+    "靜止點 (1.4px)": [
+      {
+        "track_id": 2,
+        "start_frame": 3,
+        "duration": 5,
+        "quality_score": 0
+      }
+    ],
+    "速度異常 (0.9px/f)": [
+      {
+        "track_id": 6,
+        "start_frame": 10,
+        "duration": 6,
+        "quality_score": 65.97950280510034
+      }
+    ],
+    "靜止點 (0.0px)": [
+      {
+        "track_id": 14,
+        "start_frame": 31,
+        "duration": 5,
+        "quality_score": 0
+      }
+    ],
+    "速度異常 (0.3px/f)": [
+      {
+        "track_id": 9,
+        "start_frame": 19,
+        "duration": 8,
+        "quality_score": 60.11250550735803
+      }
+    ],
+    "持續時間太短 (2幀 < 3幀)": [
+      {
+        "track_id": 16,
+        "start_frame": 35,
+        "duration": 2,
+        "quality_score": 0
+      },
+      {
+        "track_id": 19,
+        "start_frame": 50,
+        "duration": 2,
+        "quality_score": 0
+      },
+      {
+        "track_id": 22,
+        "start_frame": 65,
+        "duration": 2,
+        "quality_score": 0
+      }
+    ],
+    "速度異常 (0.7px/f)": [
+      {
+        "track_id": 17,
+        "start_frame": 36,
+        "duration": 9,
+        "quality_score": 58.505001089696066
+      }
+    ],
+    "速度異常 (0.5px/f)": [
+      {
+        "track_id": 20,
+        "start_frame": 53,
+        "duration": 5,
+        "quality_score": 60.76873577581669
+      },
+      {
+        "track_id": 21,
+        "start_frame": 64,
+        "duration": 5,
+        "quality_score": 56.93755330546814
+      }
+    ]
+  }
+}

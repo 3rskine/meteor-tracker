@@ -1,0 +1,252 @@
+{
+  "video": "group\\2.avi",
+  "total_meteors": 3,
+  "fps": 29.97002997002997,
+  "sensitivity": "medium",
+  "quality_threshold": 10,
+  "light_trail_config": {
+    "length": 3,
+    "mode": "enhanced"
+  },
+  "scene_changes": [],
+  "meteors": [
+    {
+      "meteor_id": "meteor_001",
+      "frame_range": [
+        28,
+        30
+      ],
+      "duration_frames": 2,
+      "trajectory": [
+        {
+          "x": 57,
+          "y": 231,
+          "frame": 28,
+          "brightness": 24.0,
+          "area": 11.0
+        },
+        {
+          "x": 50,
+          "y": 234,
+          "frame": 30,
+          "brightness": 19.642857142857142,
+          "area": 8.5
+        }
+      ],
+      "bbox": [
+        40,
+        221,
+        27,
+        23
+      ],
+      "length": 7.615773105863909,
+      "angle": 156.80140948635182,
+      "speed": 3.8078865529319543,
+      "max_brightness": 24.0,
+      "quality_score": 39.963303086250754
+    },
+    {
+      "meteor_id": "meteor_000",
+      "frame_range": [
+        26,
+        45
+      ],
+      "duration_frames": 20,
+      "trajectory": [
+        {
+          "x": 53,
+          "y": 233,
+          "frame": 26,
+          "brightness": 23.400000000000002,
+          "area": 13.0
+        },
+        {
+          "x": 52,
+          "y": 233,
+          "frame": 27,
+          "brightness": 23.425,
+          "area": 27.0
+        },
+        {
+          "x": 50,
+          "y": 235,
+          "frame": 28,
+          "brightness": 26.344827586206897,
+          "area": 20.5
+        },
+        {
+          "x": 48,
+          "y": 237,
+          "frame": 29,
+          "brightness": 26.642857142857142,
+          "area": 19.5
+        },
+        {
+          "x": 45,
+          "y": 238,
+          "frame": 30,
+          "brightness": 32.387096774193544,
+          "area": 22.0
+        },
+        {
+          "x": 44,
+          "y": 240,
+          "frame": 31,
+          "brightness": 28.610169491525422,
+          "area": 42.0
+        },
+        {
+          "x": 41,
+          "y": 242,
+          "frame": 32,
+          "brightness": 29.189655172413794,
+          "area": 42.0
+        },
+        {
+          "x": 39,
+          "y": 243,
+          "frame": 33,
+          "brightness": 26.846153846153847,
+          "area": 47.5
+        },
+        {
+          "x": 37,
+          "y": 245,
+          "frame": 34,
+          "brightness": 30.0,
+          "area": 53.0
+        },
+        {
+          "x": 34,
+          "y": 247,
+          "frame": 35,
+          "brightness": 33.41772151898734,
+          "area": 59.5
+        },
+        {
+          "x": 31,
+          "y": 250,
+          "frame": 36,
+          "brightness": 31.726315789473684,
+          "area": 72.0
+        },
+        {
+          "x": 29,
+          "y": 252,
+          "frame": 37,
+          "brightness": 32.39705882352941,
+          "area": 51.5
+        },
+        {
+          "x": 26,
+          "y": 254,
+          "frame": 38,
+          "brightness": 34.74698795180723,
+          "area": 65.5
+        },
+        {
+          "x": 23,
+          "y": 257,
+          "frame": 39,
+          "brightness": 35.233333333333334,
+          "area": 70.0
+        },
+        {
+          "x": 21,
+          "y": 259,
+          "frame": 40,
+          "brightness": 31.38709677419355,
+          "area": 73.0
+        },
+        {
+          "x": 17,
+          "y": 261,
+          "frame": 41,
+          "brightness": 35.166666666666664,
+          "area": 60.0
+        },
+        {
+          "x": 14,
+          "y": 264,
+          "frame": 42,
+          "brightness": 35.94318181818182,
+          "area": 68.0
+        },
+        {
+          "x": 11,
+          "y": 267,
+          "frame": 43,
+          "brightness": 40.663366336633665,
+          "area": 80.5
+        },
+        {
+          "x": 8,
+          "y": 270,
+          "frame": 44,
+          "brightness": 35.4,
+          "area": 72.0
+        },
+        {
+          "x": 5,
+          "y": 272,
+          "frame": 45,
+          "brightness": 36.6144578313253,
+          "area": 65.5
+        }
+      ],
+      "bbox": [
+        0,
+        223,
+        68,
+        59
+      ],
+      "length": 62.884093731350866,
+      "angle": 140.9061411137705,
+      "speed": 3.3096891437553086,
+      "max_brightness": 40.663366336633665,
+      "quality_score": 83.17022233429866
+    },
+    {
+      "meteor_id": "meteor_002",
+      "frame_range": [
+        46,
+        48
+      ],
+      "duration_frames": 3,
+      "trajectory": [
+        {
+          "x": 5,
+          "y": 272,
+          "frame": 46,
+          "brightness": 39.45360824742268,
+          "area": 80.0
+        },
+        {
+          "x": 4,
+          "y": 272,
+          "frame": 47,
+          "brightness": 34.96875,
+          "area": 50.0
+        },
+        {
+          "x": 3,
+          "y": 274,
+          "frame": 48,
+          "brightness": 24.375,
+          "area": 23.0
+        }
+      ],
+      "bbox": [
+        0,
+        262,
+        22,
+        22
+      ],
+      "length": 3.23606797749979,
+      "angle": 135.0,
+      "speed": 1.618033988749895,
+      "max_brightness": 39.45360824742268,
+      "quality_score": 62.93706063779081
+    }
+  ]
+}

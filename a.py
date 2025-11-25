@@ -1,14 +1,13 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*
-#python meteordect.py --videos 影片名稱.mp4(須和該程式同一資料夾)
+
 """
-光軌增強版流星偵測系統 - 進階優化版
+光軌增強版流星偵測系統 - 進階優化版（含 OSD 過濾）
 新增功能：
 1. 多層級偵測（同時用不同參數偵測）
 2. 恆星過濾器（背景減除 + 靜止點過濾）
 3. 場景切換保護增強
 4. 軌跡品質評分系統
 5. 自適應參數調整
+6. OSD（影像下方顯示的跳動數字）自動偵測與遮罩
 """
 import cv2
 import numpy as np
@@ -19,7 +18,7 @@ import argparse
 from datetime import datetime
 from collections import defaultdict, deque
 import copy
-
+import sys
 
 # ==================== Kalman 濾波器 ====================
 class SimpleKalman:
@@ -112,13 +111,15 @@ class StarBackgroundModel:
 
 # ==================== 光軌處理器 ====================
 class LightTrailProcessor:
-    """光軌 (Light Trail) 處理器 - 累積移動物體軌跡"""
+    """光軌 (Light Trail) 處理器 - 累積移動物體軌跡（含低FPS補線功能）"""
 
-    def __init__(self, trail_length=10, decay_type='uniform'):
+    def __init__(self, trail_length=5, decay_type='uniform', enable_interpolation=True):
         self.trail_length = trail_length
         self.decay_type = decay_type
         self.frame_buffer = deque(maxlen=trail_length)
         self.weights = self._compute_weights()
+        self.enable_interpolation = enable_interpolation
+        self.prev_frame = None   # 用來記住上一個 frame
 
     def _compute_weights(self):
         n = max(1, self.trail_length)
@@ -131,8 +132,42 @@ class LightTrailProcessor:
         weights = weights / weights.sum()
         return weights[::-1]
 
+    # ------------------------ 這裡是你最需要改的地方 ------------------------
     def add_frame(self, frame):
-        self.frame_buffer.append(frame.copy())
+        frame_copy = frame.copy()
+
+        # 如果啟用補線 & 有上一張 frame，就補間軌跡
+        if self.enable_interpolation and self.prev_frame is not None:
+            self._interpolate_trail(self.prev_frame, frame_copy)
+
+        self.frame_buffer.append(frame_copy)
+        self.prev_frame = frame.copy()
+    # -----------------------------------------------------------------------
+
+    def _interpolate_trail(self, prev_frame, curr_frame):
+        """在兩個 frame 間補線，讓低FPS時軌跡仍連續"""
+
+        # 找出亮點（閾值可調，越低越敏感）
+        threshold = 200
+        p1_list = np.argwhere(prev_frame > threshold)
+        p2_list = np.argwhere(curr_frame > threshold)
+
+        # 沒亮點直接跳過
+        if len(p1_list) == 0 or len(p2_list) == 0:
+            return
+
+        # 計算兩張圖亮點的平均位置（當作軌跡位置）
+        p1 = p1_list.mean(axis=0).astype(int)
+        p2 = p2_list.mean(axis=0).astype(int)
+
+        # cv2 的座標要反過來 (x,y)
+        cv2.line(curr_frame,
+                 (p1[1], p1[0]),
+                 (p2[1], p2[0]),
+                 color=255,
+                 thickness=1)
+
+    # -----------------------------------------------------------------------
 
     def get_light_trail(self):
         if len(self.frame_buffer) == 0:
@@ -340,6 +375,17 @@ class AdvancedMeteorTracker:
             self.debug_folder = self.output_folder / "debug_frames"
             self.debug_folder.mkdir(exist_ok=True)
 
+        # ============ OSD 探測相關 ============
+        self.osd_mask = None
+        self._osd_change_count = None
+        self.osd_warmup_frames = min(200, max(30, int(self.fps * 5)))
+        self.osd_min_freq_ratio = 0.12
+        self.osd_dilate = 5
+        self.manual_osd_bbox = None
+
+        # **新增：如果有手動指定，立即建立 mask**
+        self._manual_osd_mask = None  # 先準備變數
+
         with open(self.log_file, 'w', encoding='utf-8') as f:
             f.write(f"Log start: {datetime.now()}\n")
             f.write(f"進階偵測模式: sensitivity={sensitivity}\n")
@@ -369,21 +415,21 @@ class AdvancedMeteorTracker:
             self.spot_frame_cap = 150
             self.min_max_brightness = 0.2
             self.min_speed_px_per_frame = 2.0
-            self.quality_threshold = 30  # 較低的品質門檻
+            self.quality_threshold = 30  
             self.base_threshold = 12
-            self.min_track_duration = 4  # 最少持續 4 幀
+            self.min_track_duration = 4 
             
         else:  # medium (default)
-            self.min_movement_pixels = 2
+            self.min_movement_pixels = 10
             self.movement_check_frames = 2
             self.lost_track_threshold = 10
             self.min_area_pixels = 3
             self.spot_frame_cap = 200
             self.min_max_brightness = 1.5
             self.min_speed_px_per_frame = 1.0
-            self.quality_threshold = 70  # 中等品質門檻
+            self.quality_threshold = 10  
             self.base_threshold = 8
-            self.min_track_duration = 3  # **最少持續 3 幀**（核心過濾）
+            self.min_track_duration = 3  
 
     def log(self, message):
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -734,12 +780,26 @@ class AdvancedMeteorTracker:
         delta_color = cv2.cvtColor(delta, cv2.COLOR_GRAY2BGR)
         trail_color = cv2.cvtColor(light_trail_delta, cv2.COLOR_GRAY2BGR)
 
-        # 標記 spots（綠色=移動，紅色=靜止恆星）
+        # **新增：顯示 OSD 遮罩區域（半透明紅色）**
+        if self.osd_mask is not None:
+            # 將 scaled mask 放大回原解析度
+            mask_full = cv2.resize(self.osd_mask, (self.width, self.height), interpolation=cv2.INTER_NEAREST)
+            # 創建紅色半透明覆蓋層
+            overlay = vis.copy()
+            overlay[mask_full > 0] = [0, 0, 255]  # 紅色
+            # 混合（透明度 30%）
+            cv2.addWeighted(overlay, 0.3, vis, 0.7, 0, vis)
+            
+            # 在遮罩邊界畫框
+            contours, _ = cv2.findContours(mask_full, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(vis, contours, -1, (0, 0, 255), 2)
+
+        # 標記 spots（綠色=移動，紅色=靜止恆星，黃色=在OSD內被過濾）
         for spot in spots:
             if self.star_background.is_static_star(spot, frame_idx):
-                cv2.circle(vis, (spot['x'], spot['y']), 5, (0, 0, 255), 2)  # 紅色
+                cv2.circle(vis, (spot['x'], spot['y']), 5, (0, 0, 255), 2)  # 紅色（恆星）
             else:
-                cv2.circle(vis, (spot['x'], spot['y']), 5, (0, 255, 0), 2)  # 綠色
+                cv2.circle(vis, (spot['x'], spot['y']), 5, (0, 255, 0), 2)  # 綠色（移動）
 
         colors = [(255, 0, 0), (0, 255, 255), (255, 0, 255), (0, 128, 255), (128, 255, 0)]
         for idx, track in enumerate(self.active_tracks):
@@ -755,17 +815,32 @@ class AdvancedMeteorTracker:
                 cv2.circle(vis, (int(pred_x), int(pred_y)), 3, color, -1)
 
         combined = np.hstack([vis, delta_color, trail_color])
+        
+        # **新增：OSD 資訊顯示**
+        osd_info = f"OSD Mask: {'Active' if self.osd_mask is not None else 'None'}"
         info = (f"Frame {frame_idx} | Spots: {len(spots)} | "
-               f"Active: {len(self.active_tracks)} | Mode: {self.light_trail_mode} | Sens: {self.sensitivity}")
+            f"Active: {len(self.active_tracks)} | {osd_info}")
         cv2.putText(combined, info, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                   0.6, (255, 255, 255), 2)
+                0.5, (255, 255, 255), 1)
 
         filename = self.debug_folder / f"frame_{frame_idx:05d}.jpg"
         cv2.imwrite(str(filename), combined)
 
+    def _spot_in_osd(self, spot):
+        """spot 的座標是原解析度 (x,y)；我們將其轉到 scaled space 檢查 osd_mask"""
+        if self.osd_mask is None:
+            return False
+        # map to scaled coordinates
+        sx = int(round(spot['x'] * self.proc_scale))
+        sy = int(round(spot['y'] * self.proc_scale))
+        h, w = self.osd_mask.shape
+        if sx < 0 or sy < 0 or sx >= w or sy >= h:
+            return False
+        return bool(self.osd_mask[sy, sx])
+
     def process_video(self):
         self.log("=" * 80)
-        self.log("進階流星偵測系統（多層級 + 恆星過濾 + 品質評分）")
+        self.log("進階流星偵測系統（多層級 + 恆星過濾 + 品質評分 + OSD 遮罩）")
         self.log("=" * 80)
         self.log(f"影片: {self.video_path}")
         self.log(f"總幀數: {self.total_frames}, FPS: {self.fps:.2f}")
@@ -790,6 +865,65 @@ class AdvancedMeteorTracker:
 
         self.gray_buffer.append(prev_gray)
         self.light_trail.add_frame(prev_gray)
+        
+        # ===== 手動 OSD Mask 建立（只在這裡做一次）=====
+        if self.manual_osd_bbox is not None:
+            x, y, w, h = self.manual_osd_bbox
+            # 轉為 scaled space
+            sx = int(round(x * self.proc_scale))
+            sy = int(round(y * self.proc_scale))
+            sw = int(round(w * self.proc_scale))
+            sh = int(round(h * self.proc_scale))
+            
+            # 建立 mask（scaled resolution）
+            mask_h, mask_w = prev_gray.shape
+            mask = np.zeros((mask_h, mask_w), dtype=np.uint8)
+            # 確保不超出邊界
+            sy = max(0, min(sy, mask_h))
+            sx = max(0, min(sx, mask_w))
+            sh = min(sh, mask_h - sy)
+            sw = min(sw, mask_w - sx)
+            
+            cv2.rectangle(mask, (sx, sy), (sx+sw, sy+sh), 1, -1)
+            
+            # 儲存 mask（uint8, 0 or 1）
+            self.osd_mask = (mask > 0).astype(np.uint8)
+            
+            self.log(f"✓ 手動 OSD mask 已建立: 原座標({x},{y},{w},{h}) -> scaled({sx},{sy},{sw},{sh})")
+            
+            # **視覺化輸出**
+            if self.debug:
+                # 1. 輸出原始遮罩（scaled resolution）
+                dbg_path = self.debug_folder / "osd_mask_scaled.png"
+                cv2.imwrite(str(dbg_path), (self.osd_mask * 255).astype(np.uint8))
+                
+                # 2. 輸出放大到原解析度的遮罩
+                mask_full = cv2.resize(self.osd_mask, (self.width, self.height), interpolation=cv2.INTER_NEAREST)
+                dbg_path_full = self.debug_folder / "osd_mask_fullres.png"
+                cv2.imwrite(str(dbg_path_full), (mask_full * 255).astype(np.uint8))
+                
+                # 3. 輸出疊加在第一幀上的視覺化
+                first_frame_gray = cv2.cvtColor(first_frame, cv2.COLOR_BGR2GRAY)
+                first_frame_color = cv2.cvtColor(first_frame_gray, cv2.COLOR_GRAY2BGR)
+                overlay = first_frame_color.copy()
+                overlay[mask_full > 0] = [0, 0, 255]  # 紅色
+                result = cv2.addWeighted(overlay, 0.4, first_frame_color, 0.6, 0)
+                
+                # 畫出遮罩邊界
+                contours_full, _ = cv2.findContours(mask_full, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                cv2.drawContours(result, contours_full, -1, (0, 0, 255), 2)
+                
+                # 加上文字說明
+                cv2.putText(result, "RED = OSD Masked Region", (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                
+                dbg_path_vis = self.debug_folder / "osd_mask_visualization.jpg"
+                cv2.imwrite(str(dbg_path_vis), result)
+                
+                self.log(f"✓ OSD 遮罩視覺化已儲存:")
+                self.log(f"  - {dbg_path}")
+                self.log(f"  - {dbg_path_full}")
+                self.log(f"  - {dbg_path_vis}")
 
         frame_idx = 1
 
@@ -810,6 +944,8 @@ class AdvancedMeteorTracker:
 
             self.gray_buffer.append(curr_gray)
             self.light_trail.add_frame(curr_gray)
+
+            # ... 其餘程式碼保持不變 ...
 
             # 生成光軌效果
             if self.light_trail_mode == 'weighted':
@@ -837,6 +973,58 @@ class AdvancedMeteorTracker:
             else:
                 delta = delta_standard
             
+            # ===== OSD 自動偵測 (累計像素變化次數) =====
+            # 確保有初始化 _osd_change_count（尺寸為 curr_gray 的形狀）
+            if self._osd_change_count is None:
+                self._osd_change_count = np.zeros_like(curr_gray, dtype=np.uint16)
+
+            # 判斷像素是否有「明顯變化」(避免噪聲)
+            osd_change_mask = (delta_standard > 20).astype(np.uint8)  # 20 可調
+            # 將 uint8 0/1 加入計數（注意：curr_gray 已是 scaled resolution）
+            self._osd_change_count += osd_change_mask
+
+            # 當累積到足夠的 warmup frames 時，建立 osd_mask（只做一次）
+            if self.osd_mask is None and frame_idx >= self.osd_warmup_frames:
+                try:
+                    # 建立比例圖（0..1）
+                    freq = self._osd_change_count.astype(np.float32) / float(max(1, self.osd_warmup_frames))
+                    candidate = (freq >= self.osd_min_freq_ratio).astype(np.uint8) * 255
+
+                    # 形態學清理：開運算去掉孤點，膨脹填滿 region
+                    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+                    candidate = cv2.morphologyEx(candidate, cv2.MORPH_OPEN, kernel, iterations=1)
+                    candidate = cv2.dilate(candidate, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (self.osd_dilate, self.osd_dilate)), iterations=1)
+
+                    # 過濾太小的區域
+                    contours, _ = cv2.findContours(candidate.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    mask = np.zeros_like(candidate)
+                    for cnt in contours:
+                        area = cv2.contourArea(cnt)
+                        if area >= 100:  # 忽略小斑點 (可調)
+                            cv2.drawContours(mask, [cnt], -1, 255, -1)
+
+                    # 如果有 manual bbox，則使用 manual 覆蓋（coords 為原解析度）
+                    if self.manual_osd_bbox is not None:
+                        x, y, w, h = self.manual_osd_bbox
+                        # 將原解析度 bbox 轉為 scaled space (curr_gray)
+                        sx = int(round(x * self.proc_scale))
+                        sy = int(round(y * self.proc_scale))
+                        sw = int(round(w * self.proc_scale))
+                        sh = int(round(h * self.proc_scale))
+                        cv2.rectangle(mask, (sx, sy), (sx+sw, sy+sh), 255, -1)
+
+                    # 儲存 mask（uint8, 0 or 1）
+                    self.osd_mask = (mask > 0).astype(np.uint8)
+
+                    # log
+                    self.log(f"OSD mask 建立 (scaled shape={self.osd_mask.shape}), candidate regions: {len(contours)}")
+                    # 可視化（debug）
+                    if self.debug:
+                        dbg_path = self.debug_folder / "osd_mask_scaled.png"
+                        cv2.imwrite(str(dbg_path), (self.osd_mask * 255).astype(np.uint8))
+                except Exception as e:
+                    self.log(f"[警告] OSD mask 建立失敗: {e}")
+
             # 保留 prev_gray_k 供場景檢測使用
             prev_gray_for_scene = prev_gray_k
 
@@ -894,6 +1082,13 @@ class AdvancedMeteorTracker:
                 self.log(f"  [恆星過濾] Frame {frame_idx}: {len(spots)} -> {len(filtered_spots)} spots")
 
             spots = filtered_spots
+
+            # 在 matching 之前先把位於 OSD 的點移除
+            if self.osd_mask is not None:
+                pre_len = len(spots)
+                spots = [s for s in spots if not self._spot_in_osd(s)]
+                if self.debug and len(spots) != pre_len:
+                    self.log(f"  [OSD 過濾] {pre_len} -> {len(spots)} spots")
 
             # pending_spots 用於穩定性檢查
             self.pending_spots.append([(s['x'], s['y']) for s in spots])
@@ -1098,57 +1293,271 @@ class AdvancedMeteorTracker:
         return output_video
 
 
+class BatchMeteorProcessor:
+    """批次處理資料夾內的所有 AVI 檔案"""
+    
+    def __init__(self, input_folder, output_base_folder, **tracker_kwargs):
+        self.input_folder = Path(input_folder)
+        self.output_base_folder = Path(output_base_folder)
+        self.tracker_kwargs = tracker_kwargs
+        
+        if not self.input_folder.exists():
+            raise FileNotFoundError(f"找不到資料夾: {input_folder}")
+        
+        self.output_base_folder.mkdir(parents=True, exist_ok=True)
+        
+        # 批次處理日誌
+        self.batch_log_file = self.output_base_folder / "batch_processing.log"
+        self.results_summary = []
+        
+    def log(self, message):
+        """記錄批次處理日誌"""
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log_msg = f"[{timestamp}] {message}"
+        print(log_msg)
+        with open(self.batch_log_file, 'a', encoding='utf-8') as f:
+            f.write(log_msg + "\n")
+    
+    def find_avi_files(self):
+        """尋找資料夾內所有 AVI 檔案（包含子資料夾）"""
+        avi_files = []
+        
+        # 搜尋 .avi 和 .AVI
+        for ext in ['*.avi', '*.AVI']:
+            avi_files.extend(self.input_folder.glob(ext))
+            avi_files.extend(self.input_folder.glob(f"**/{ext}"))  # 遞迴搜尋
+        
+        # 去重並排序
+        avi_files = sorted(set(avi_files))
+        return avi_files
+    
+    def process_single_video(self, video_path, video_index, total_videos):
+        """處理單一影片"""
+        self.log("=" * 80)
+        self.log(f"處理影片 [{video_index}/{total_videos}]: {video_path.name}")
+        self.log("=" * 80)
+        
+        # 為每個影片建立獨立輸出資料夾
+        output_folder = self.output_base_folder / video_path.stem
+        
+        try:
+            # 建立追蹤器
+            tracker = AdvancedMeteorTracker(
+                video_path,
+                output_folder,
+                **self.tracker_kwargs
+            )
+            
+            # **關鍵修改：如果有 OSD bbox，套用到每個 tracker**
+            if hasattr(self, 'manual_osd_bbox') and self.manual_osd_bbox is not None:
+                tracker.manual_osd_bbox = self.manual_osd_bbox
+                tracker.log(f"套用 OSD bbox: {self.manual_osd_bbox}")
+            
+            # 執行偵測
+            start_time = datetime.now()
+            meteors = tracker.process_video()
+            end_time = datetime.now()
+            
+            processing_time = (end_time - start_time).total_seconds()
+            
+            # 記錄結果
+            result = {
+                'video_name': video_path.name,
+                'video_path': str(video_path),
+                'output_folder': str(output_folder),
+                'meteor_count': len(meteors),
+                'processing_time_seconds': processing_time,
+                'status': 'success',
+                'timestamp': start_time.isoformat()
+            }
+            
+            self.log(f"✓ 完成: 偵測到 {len(meteors)} 顆流星，耗時 {processing_time:.1f} 秒")
+            
+        except Exception as e:
+            self.log(f"❌ 錯誤: {str(e)}")
+            result = {
+                'video_name': video_path.name,
+                'video_path': str(video_path),
+                'status': 'failed',
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            }
+        
+        self.results_summary.append(result)
+        return result
+    
+    def process_all(self):
+        """處理所有影片"""
+        self.log("開始批次處理流星偵測")
+        self.log(f"輸入資料夾: {self.input_folder}")
+        self.log(f"輸出資料夾: {self.output_base_folder}")
+        
+        # 尋找所有 AVI 檔案
+        avi_files = self.find_avi_files()
+        
+        if not avi_files:
+            self.log("❌ 找不到任何 AVI 檔案")
+            return []
+        
+        self.log(f"找到 {len(avi_files)} 個 AVI 檔案")
+        for i, f in enumerate(avi_files, 1):
+            self.log(f"  {i}. {f.name}")
+        
+        # 逐一處理
+        batch_start = datetime.now()
+        
+        for i, video_path in enumerate(avi_files, 1):
+            self.process_single_video(video_path, i, len(avi_files))
+        
+        batch_end = datetime.now()
+        total_time = (batch_end - batch_start).total_seconds()
+        
+        # 生成總結報告
+        self.generate_summary_report(total_time)
+        
+        return self.results_summary
+    
+    def generate_summary_report(self, total_time):
+        """生成批次處理總結報告"""
+        self.log("\n" + "=" * 80)
+        self.log("批次處理完成")
+        self.log("=" * 80)
+        
+        success_count = sum(1 for r in self.results_summary if r['status'] == 'success')
+        failed_count = len(self.results_summary) - success_count
+        total_meteors = sum(r.get('meteor_count', 0) for r in self.results_summary)
+        
+        self.log(f"總影片數: {len(self.results_summary)}")
+        self.log(f"成功: {success_count}, 失敗: {failed_count}")
+        self.log(f"總偵測流星數: {total_meteors}")
+        self.log(f"總耗時: {total_time:.1f} 秒 ({total_time/60:.1f} 分鐘)")
+        
+        # 儲存 JSON 報告
+        summary_file = self.output_base_folder / "batch_summary.json"
+        summary_data = {
+            'total_videos': len(self.results_summary),
+            'success_count': success_count,
+            'failed_count': failed_count,
+            'total_meteors': total_meteors,
+            'total_time_seconds': total_time,
+            'results': self.results_summary
+        }
+        
+        with open(summary_file, 'w', encoding='utf-8') as f:
+            json.dump(summary_data, f, indent=2, ensure_ascii=False)
+        
+        self.log(f"✓ 總結報告已儲存: {summary_file}")
+        
+        # 顯示每個影片的結果
+        self.log("\n詳細結果:")
+        for i, result in enumerate(self.results_summary, 1):
+            if result['status'] == 'success':
+                self.log(f"  {i}. {result['video_name']}: "
+                        f"{result['meteor_count']} 顆流星 "
+                        f"({result['processing_time_seconds']:.1f}s)")
+            else:
+                self.log(f"  {i}. {result['video_name']}: 失敗 - {result.get('error', 'unknown')}")
+
+
 # ==================== 命令列介面 ====================
+def parse_osd_bbox(arg):
+    """解析 'x,y,w,h' 字串為 tuple"""
+    try:
+        parts = [int(p) for p in arg.split(',')]
+        if len(parts) != 4:
+            raise ValueError()
+        return tuple(parts)
+    except Exception:
+        raise argparse.ArgumentTypeError("OSD bbox 格式錯誤，應為 x,y,w,h（整數）")
+
 def main():
     parser = argparse.ArgumentParser(
-        description='進階流星偵測系統 - 多層級 + 恆星過濾 + 品質評分',
+        description='批次流星偵測系統 - 處理資料夾內所有 AVI 檔案',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 範例:
-  # 高敏感度（容易偵測但誤報多）
-  python meteor_advanced.py --video me.mp4 --sensitivity high --debug
+  # 處理單一影片
+  python meteor_advanced.py --video video.avi --sensitivity medium
 
-  # 中等敏感度（平衡）
-  python meteor_advanced.py --video me.mp4 --sensitivity medium
+  # 批次處理資料夾（包含子資料夾）
+  python meteor_advanced.py --folder /path/to/videos --sensitivity medium --debug
 
-  # 低敏感度（只抓明顯流星）
-  python meteor_advanced.py --video me.mp4 --sensitivity low
-
-  # 自訂參數
-  python meteor_advanced.py --video me.mp4 --trail-length 5 --proc-scale 0.7 --debug
+  # 批次處理 + 手動 OSD
+  python meteor_advanced.py --folder ./videos --osd-bbox 0,900,1920,180 --sensitivity high
         """
     )
-    parser.add_argument('--video', type=str, required=True, help='影片路徑')
+    
+    # 修改為互斥群組：--video 或 --folder
+    input_group = parser.add_mutually_exclusive_group(required=True)
+    input_group.add_argument('--video', type=str, help='單一影片路徑')
+    input_group.add_argument('--folder', type=str, help='影片資料夾路徑（批次處理所有 AVI）')
+    
     parser.add_argument('--sensitivity', type=str, default='medium',
                        choices=['low', 'medium', 'high'],
-                       help='敏感度等級 (low=只抓明顯流星, medium=平衡, high=容易偵測)')
+                       help='敏感度等級')
     parser.add_argument('--trail-length', type=int, default=3,
-                       help='光軌累積幀數 (建議 3-8，預設 3)')
+                       help='光軌累積幀數')
     parser.add_argument('--trail-mode', type=str, default='enhanced',
                        choices=['weighted', 'max', 'enhanced'],
-                       help='光軌模式 (預設 enhanced)')
+                       help='光軌模式')
     parser.add_argument('--proc-scale', type=float, default=1.0,
-                       help='處理解析度縮放 (0.5 ~ 1.0)，0.5 可加速並降低噪音')
+                       help='處理解析度縮放 (0.5 ~ 1.0)')
     parser.add_argument('--debug', action='store_true',
-                       help='啟用調試模式（輸出偵測過程圖片 + 拒絕分析）')
-
+                       help='啟用調試模式')
+    parser.add_argument('--osd-bbox', type=parse_osd_bbox, default=(0, 470, 550, 50),
+                       help='手動指定 OSD 區塊: x,y,w,h')
+    
     args = parser.parse_args()
-
-    if not os.path.exists(args.video):
-        print(f"❌ 找不到影片: {args.video}")
-        return
-
-    output_folder = Path("output_advanced") / Path(args.video).stem
-    tracker = AdvancedMeteorTracker(
-        args.video,
-        output_folder,
-        debug=args.debug,
-        light_trail_length=args.trail_length,
-        light_trail_mode=args.trail_mode,
-        proc_scale=args.proc_scale,
-        sensitivity=args.sensitivity
-    )
-    tracker.process_video()
+    
+    # 準備 tracker 參數
+    tracker_kwargs = {
+        'debug': args.debug,
+        'light_trail_length': args.trail_length,
+        'light_trail_mode': args.trail_mode,
+        'proc_scale': args.proc_scale,
+        'sensitivity': args.sensitivity
+    }
+    
+    # 判斷是單一影片還是批次處理
+    if args.video:
+        # 單一影片模式（原本的邏輯）
+        if not os.path.exists(args.video):
+            print(f"❌ 找不到影片: {args.video}")
+            return
+        
+        output_folder = Path("output_advanced") / Path(args.video).stem
+        tracker = AdvancedMeteorTracker(
+            args.video,
+            output_folder,
+            **tracker_kwargs
+        )
+        
+        if args.osd_bbox is not None:
+            tracker.manual_osd_bbox = args.osd_bbox
+            tracker.log(f"手動設定 OSD bbox: {tracker.manual_osd_bbox}")
+        
+        tracker.process_video()
+        
+    else:
+        # 批次處理模式
+        if not os.path.exists(args.folder):
+            print(f"❌ 找不到資料夾: {args.folder}")
+            return
+        
+        output_base = Path("output_group") / Path(args.folder).name
+        
+        processor = BatchMeteorProcessor(
+            args.folder,
+            output_base,
+            **tracker_kwargs
+        )
+        
+        # **關鍵修改：將 OSD bbox 傳遞給批次處理器**
+        if args.osd_bbox is not None:
+            processor.manual_osd_bbox = args.osd_bbox
+            processor.log(f"批次處理將套用 OSD bbox: {args.osd_bbox}")
+        
+        processor.process_all()
 
 
 if __name__ == '__main__':
