@@ -1,0 +1,70 @@
+{
+  "video": "group\\3.avi",
+  "total_meteors": 1,
+  "fps": 29.97002997002997,
+  "sensitivity": "medium",
+  "quality_threshold": 10,
+  "light_trail_config": {
+    "length": 3,
+    "mode": "enhanced"
+  },
+  "scene_changes": [],
+  "meteors": [
+    {
+      "meteor_id": "meteor_001",
+      "frame_range": [
+        46,
+        54
+      ],
+      "duration_frames": 5,
+      "trajectory": [
+        {
+          "x": 144,
+          "y": 167,
+          "frame": 46,
+          "brightness": 21.875,
+          "area": 4.0
+        },
+        {
+          "x": 144,
+          "y": 167,
+          "frame": 49,
+          "brightness": 21.875,
+          "area": 4.0
+        },
+        {
+          "x": 143,
+          "y": 183,
+          "frame": 52,
+          "brightness": 53.5,
+          "area": 15.0
+        },
+        {
+          "x": 143,
+          "y": 188,
+          "frame": 53,
+          "brightness": 52.06060606060606,
+          "area": 23.0
+        },
+        {
+          "x": 143,
+          "y": 191,
+          "frame": 54,
+          "brightness": 91.88461538461539,
+          "area": 18.0
+        }
+      ],
+      "bbox": [
+        133,
+        157,
+        21,
+        44
+      ],
+      "length": 24.0312195418814,
+      "angle": 92.38594403038881,
+      "speed": 3.003902442735175,
+      "max_brightness": 91.88461538461539,
+      "quality_score": 71.52455003164314
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "video": "20230202\\@@M20230202_233651_lulin_WB.avi",
+  "total_meteors": 3,
+  "fps": 29.97002997002997,
+  "sensitivity": "medium",
+  "quality_threshold": 10,
+  "light_trail_config": {
+    "length": 3,
+    "mode": "enhanced"
+  },
+  "scene_changes": [],
+  "meteors": [
+    {
+      "meteor_id": "meteor_000",
+      "frame_range": [
+        31,
+        34
+      ],
+      "duration_frames": 4,
+      "trajectory": [
+        {
+          "x": 209,
+          "y": 182,
+          "frame": 31,
+          "brightness": 22.428571428571427,
+          "area": 19.0
+        },
+        {
+          "x": 208,
+          "y": 182,
+          "frame": 32,
+          "brightness": 27.34146341463415,
+          "area": 29.0
+        },
+        {
+          "x": 207,
+          "y": 184,
+          "frame": 33,
+          "brightness": 30.814814814814813,
+          "area": 41.0
+        },
+        {
+          "x": 206,
+          "y": 184,
+          "frame": 34,
+          "brightness": 33.666666666666664,
+          "area": 46.5
+        }
+      ],
+      "bbox": [
+        196,
+        172,
+        23,
+        22
+      ],
+      "length": 4.23606797749979,
+      "angle": 146.30993247402023,
+      "speed": 1.4120226591665965,
+      "max_brightness": 33.666666666666664,
+      "quality_score": 64.3777576964805
+    },
+    {
+      "meteor_id": "meteor_001",
+      "frame_range": [
+        35,
+        47
+      ],
+      "duration_frames": 13,
+      "trajectory": [
+        {
+          "x": 204,
+          "y": 189,
+          "frame": 35,
+          "brightness": 35.55384615384616,
+          "area": 50.0
+        },
+        {
+          "x": 202,
+          "y": 190,
+          "frame": 36,
+          "brightness": 38.666666666666664,
+          "area": 48.5
+        },
+        {
+          "x": 200,
+          "y": 192,
+          "frame": 37,
+          "brightness": 41.83870967741935,
+          "area": 47.5
+        },
+        {
+          "x": 199,
+          "y": 194,
+          "frame": 38,
+          "brightness": 39.46969696969697,
+          "area": 50.5
+        },
+        {
+          "x": 197,
+          "y": 195,
+          "frame": 39,
+          "brightness": 39.955882352941174,
+          "area": 53.0
+        },
+        {
+          "x": 196,
+          "y": 198,
+          "frame": 40,
+          "brightness": 42.74626865671642,
+          "area": 52.0
+        },
+        {
+          "x": 193,
+          "y": 200,
+          "frame": 41,
+          "brightness": 44.338235294117645,
+          "area": 52.0
+        },
+        {
+          "x": 192,
+          "y": 203,
+          "frame": 42,
+          "brightness": 41.53623188405797,
+          "area": 54.0
+        },
+        {
+          "x": 190,
+          "y": 205,
+          "frame": 43,
+          "brightness": 37.91044776119403,
+          "area": 51.5
+        },
+        {
+          "x": 188,
+          "y": 207,
+          "frame": 44,
+          "brightness": 35.20754716981132,
+          "area": 40.5
+        },
+        {
+          "x": 186,
+          "y": 209,
+          "frame": 45,
+          "brightness": 36.72222222222222,
+          "area": 26.5
+        },
+        {
+          "x": 185,
+          "y": 211,
+          "frame": 46,
+          "brightness": 30.333333333333332,
+          "area": 16.5
+        },
+        {
+          "x": 184,
+          "y": 212,
+          "frame": 47,
+          "brightness": 14.5,
+          "area": 4.0
+        }
+      ],
+      "bbox": [
+        174,
+        179,
+        40,
+        43
+      ],
+      "length": 31.602300567157766,
+      "angle": 131.0090869015702,
+      "speed": 2.6335250472631473,
+      "max_brightness": 44.338235294117645,
+      "quality_score": 84.00267733917006
+    },
+    {
+      "meteor_id": "meteor_002",
+      "frame_range": [
+        53,
+        70
+      ],
+      "duration_frames": 3,
+      "trajectory": [
+        {
+          "x": 300,
+          "y": 23,
+          "frame": 53,
+          "brightness": 9.045454545454545,
+          "area": 12.5
+        },
+        {
+          "x": 295,
+          "y": 20,
+          "frame": 60,
+          "brightness": 9.375,
+          "area": 4.0
+        },
+        {
+          "x": 290,
+          "y": 11,
+          "frame": 70,
+          "brightness": 10.25,
+          "area": 4.0
+        }
+      ],
+      "bbox": [
+        280,
+        1,
+        30,
+        32
+      ],
+      "length": 16.1265820358323,
+      "angle": -129.8055710922652,
+      "speed": 0.9486224726960176,
+      "max_brightness": 10.25,
+      "quality_score": 63.49378847944392
+    }
+  ]
+}

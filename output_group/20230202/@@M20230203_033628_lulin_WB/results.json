@@ -1,0 +1,175 @@
+{
+  "video": "20230202\\@@M20230203_033628_lulin_WB.avi",
+  "total_meteors": 2,
+  "fps": 29.97002997002997,
+  "sensitivity": "medium",
+  "quality_threshold": 10,
+  "light_trail_config": {
+    "length": 3,
+    "mode": "enhanced"
+  },
+  "scene_changes": [],
+  "meteors": [
+    {
+      "meteor_id": "meteor_001",
+      "frame_range": [
+        36,
+        39
+      ],
+      "duration_frames": 2,
+      "trajectory": [
+        {
+          "x": 172,
+          "y": 427,
+          "frame": 36,
+          "brightness": 10.090909090909092,
+          "area": 6.0
+        },
+        {
+          "x": 170,
+          "y": 428,
+          "frame": 39,
+          "brightness": 9.75,
+          "area": 10.0
+        }
+      ],
+      "bbox": [
+        160,
+        417,
+        22,
+        21
+      ],
+      "length": 2.23606797749979,
+      "angle": 153.43494882292202,
+      "speed": 0.7453559924999299,
+      "max_brightness": 10.090909090909092,
+      "quality_score": 36.57622535527275
+    },
+    {
+      "meteor_id": "meteor_000",
+      "frame_range": [
+        31,
+        45
+      ],
+      "duration_frames": 15,
+      "trajectory": [
+        {
+          "x": 395,
+          "y": 348,
+          "frame": 31,
+          "brightness": 19.444444444444443,
+          "area": 11.5
+        },
+        {
+          "x": 395,
+          "y": 348,
+          "frame": 32,
+          "brightness": 20.314285714285713,
+          "area": 23.5
+        },
+        {
+          "x": 395,
+          "y": 349,
+          "frame": 33,
+          "brightness": 19.912280701754383,
+          "area": 40.5
+        },
+        {
+          "x": 396,
+          "y": 351,
+          "frame": 34,
+          "brightness": 20.725806451612904,
+          "area": 45.0
+        },
+        {
+          "x": 396,
+          "y": 353,
+          "frame": 35,
+          "brightness": 22.75,
+          "area": 42.5
+        },
+        {
+          "x": 397,
+          "y": 356,
+          "frame": 36,
+          "brightness": 25.0,
+          "area": 43.5
+        },
+        {
+          "x": 399,
+          "y": 360,
+          "frame": 37,
+          "brightness": 28.675675675675677,
+          "area": 55.0
+        },
+        {
+          "x": 400,
+          "y": 364,
+          "frame": 38,
+          "brightness": 33.72727272727273,
+          "area": 58.5
+        },
+        {
+          "x": 402,
+          "y": 368,
+          "frame": 39,
+          "brightness": 36.51851851851852,
+          "area": 62.0
+        },
+        {
+          "x": 404,
+          "y": 372,
+          "frame": 40,
+          "brightness": 36.31818181818182,
+          "area": 68.5
+        },
+        {
+          "x": 405,
+          "y": 375,
+          "frame": 41,
+          "brightness": 37.30666666666667,
+          "area": 56.5
+        },
+        {
+          "x": 406,
+          "y": 378,
+          "frame": 42,
+          "brightness": 30.81967213114754,
+          "area": 45.0
+        },
+        {
+          "x": 407,
+          "y": 381,
+          "frame": 43,
+          "brightness": 26.108695652173914,
+          "area": 34.5
+        },
+        {
+          "x": 408,
+          "y": 384,
+          "frame": 44,
+          "brightness": 23.961538461538463,
+          "area": 18.0
+        },
+        {
+          "x": 409,
+          "y": 386,
+          "frame": 45,
+          "brightness": 14.625,
+          "area": 4.0
+        }
+      ],
+      "bbox": [
+        385,
+        338,
+        34,
+        58
+      ],
+      "length": 40.82303774645787,
+      "angle": 69.77514056883192,
+      "speed": 2.9159312676041336,
+      "max_brightness": 37.30666666666667,
+      "quality_score": 83.91659010595592
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "video": "20230202\\@@M20230203_034257_lulin_WB.avi",
+  "total_meteors": 0,
+  "fps": 29.97002997002997,
+  "sensitivity": "medium",
+  "quality_threshold": 10,
+  "light_trail_config": {
+    "length": 3,
+    "mode": "enhanced"
+  },
+  "scene_changes": [],
+  "meteors": []
+}

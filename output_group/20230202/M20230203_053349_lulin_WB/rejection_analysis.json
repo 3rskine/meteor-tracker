@@ -1,0 +1,17 @@
+{
+  "total_rejected": 1,
+  "rejection_reasons": {
+    "靜止點 (1.0px)": 1
+  },
+  "sample_tracks": [],
+  "samples_by_reason": {
+    "靜止點 (1.0px)": [
+      {
+        "track_id": 0,
+        "start_frame": 32,
+        "duration": 3,
+        "quality_score": 0
+      }
+    ]
+  }
+}

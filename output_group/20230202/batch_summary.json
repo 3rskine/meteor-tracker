@@ -1,0 +1,171 @@
+{
+  "total_videos": 18,
+  "success_count": 18,
+  "failed_count": 0,
+  "total_meteors": 19,
+  "total_time_seconds": 30.783094,
+  "results": [
+    {
+      "video_name": "@@M20230202_220940_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230202_220940_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230202_220940_lulin_WB",
+      "meteor_count": 2,
+      "processing_time_seconds": 1.960317,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:36.657913"
+    },
+    {
+      "video_name": "@@M20230202_233651_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230202_233651_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230202_233651_lulin_WB",
+      "meteor_count": 3,
+      "processing_time_seconds": 2.032576,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:38.630520"
+    },
+    {
+      "video_name": "@@M20230203_014339_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_014339_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_014339_lulin_WB",
+      "meteor_count": 1,
+      "processing_time_seconds": 1.80065,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:40.677765"
+    },
+    {
+      "video_name": "@@M20230203_021648_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_021648_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_021648_lulin_WB",
+      "meteor_count": 1,
+      "processing_time_seconds": 1.897561,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:42.491053"
+    },
+    {
+      "video_name": "@@M20230203_022929_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_022929_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_022929_lulin_WB",
+      "meteor_count": 2,
+      "processing_time_seconds": 1.806265,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:44.388614"
+    },
+    {
+      "video_name": "@@M20230203_025042_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_025042_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_025042_lulin_WB",
+      "meteor_count": 2,
+      "processing_time_seconds": 1.78511,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:46.209859"
+    },
+    {
+      "video_name": "@@M20230203_030206_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_030206_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_030206_lulin_WB",
+      "meteor_count": 2,
+      "processing_time_seconds": 2.215267,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:48.011641"
+    },
+    {
+      "video_name": "@@M20230203_033628_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_033628_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_033628_lulin_WB",
+      "meteor_count": 2,
+      "processing_time_seconds": 1.979977,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:50.242859"
+    },
+    {
+      "video_name": "@@M20230203_034257_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_034257_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_034257_lulin_WB",
+      "meteor_count": 0,
+      "processing_time_seconds": 1.452985,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:52.242820"
+    },
+    {
+      "video_name": "@@M20230203_055543_lulin_WB.avi",
+      "video_path": "20230202\\@@M20230203_055543_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\@@M20230203_055543_lulin_WB",
+      "meteor_count": 1,
+      "processing_time_seconds": 1.81228,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:53.701331"
+    },
+    {
+      "video_name": "M20230202_224933_lulin_WB.avi",
+      "video_path": "20230202\\M20230202_224933_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230202_224933_lulin_WB",
+      "meteor_count": 0,
+      "processing_time_seconds": 1.407513,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:55.513611"
+    },
+    {
+      "video_name": "M20230203_021050_lulin_WB.avi",
+      "video_path": "20230202\\M20230203_021050_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230203_021050_lulin_WB",
+      "meteor_count": 0,
+      "processing_time_seconds": 1.42903,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:56.935490"
+    },
+    {
+      "video_name": "M20230203_041022_lulin_WB.avi",
+      "video_path": "20230202\\M20230203_041022_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230203_041022_lulin_WB",
+      "meteor_count": 0,
+      "processing_time_seconds": 1.404177,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:58.374990"
+    },
+    {
+      "video_name": "M20230203_041514_lulin_WB.avi",
+      "video_path": "20230202\\M20230203_041514_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230203_041514_lulin_WB",
+      "meteor_count": 2,
+      "processing_time_seconds": 1.66951,
+      "status": "success",
+      "timestamp": "2025-11-29T15:35:59.788199"
+    },
+    {
+      "video_name": "M20230203_042712_lulin_WB.avi",
+      "video_path": "20230202\\M20230203_042712_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230203_042712_lulin_WB",
+      "meteor_count": 1,
+      "processing_time_seconds": 1.687298,
+      "status": "success",
+      "timestamp": "2025-11-29T15:36:01.472483"
+    },
+    {
+      "video_name": "M20230203_043605_lulin_WB.avi",
+      "video_path": "20230202\\M20230203_043605_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230203_043605_lulin_WB",
+      "meteor_count": 0,
+      "processing_time_seconds": 1.485752,
+      "status": "success",
+      "timestamp": "2025-11-29T15:36:03.172083"
+    },
+    {
+      "video_name": "M20230203_045216_lulin_WB.avi",
+      "video_path": "20230202\\M20230203_045216_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230203_045216_lulin_WB",
+      "meteor_count": 0,
+      "processing_time_seconds": 1.414899,
+      "status": "success",
+      "timestamp": "2025-11-29T15:36:04.668871"
+    },
+    {
+      "video_name": "M20230203_053349_lulin_WB.avi",
+      "video_path": "20230202\\M20230203_053349_lulin_WB.avi",
+      "output_folder": "output_group\\20230202\\M20230203_053349_lulin_WB",
+      "meteor_count": 0,
+      "processing_time_seconds": 1.333324,
+      "status": "success",
+      "timestamp": "2025-11-29T15:36:06.098570"
+    }
+  ]
+}

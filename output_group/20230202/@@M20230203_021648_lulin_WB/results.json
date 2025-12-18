@@ -1,0 +1,84 @@
+{
+  "video": "20230202\\@@M20230203_021648_lulin_WB.avi",
+  "total_meteors": 1,
+  "fps": 29.97002997002997,
+  "sensitivity": "medium",
+  "quality_threshold": 10,
+  "light_trail_config": {
+    "length": 3,
+    "mode": "enhanced"
+  },
+  "scene_changes": [],
+  "meteors": [
+    {
+      "meteor_id": "meteor_000",
+      "frame_range": [
+        32,
+        39
+      ],
+      "duration_frames": 7,
+      "trajectory": [
+        {
+          "x": 411,
+          "y": 217,
+          "frame": 32,
+          "brightness": 11.785714285714285,
+          "area": 8.0
+        },
+        {
+          "x": 409,
+          "y": 225,
+          "frame": 33,
+          "brightness": 14.549450549450551,
+          "area": 59.0
+        },
+        {
+          "x": 409,
+          "y": 225,
+          "frame": 34,
+          "brightness": 16.71186440677966,
+          "area": 37.0
+        },
+        {
+          "x": 406,
+          "y": 242,
+          "frame": 36,
+          "brightness": 14.793103448275861,
+          "area": 17.0
+        },
+        {
+          "x": 405,
+          "y": 249,
+          "frame": 37,
+          "brightness": 15.0,
+          "area": 4.0
+        },
+        {
+          "x": 404,
+          "y": 253,
+          "frame": 38,
+          "brightness": 16.03030303030303,
+          "area": 20.0
+        },
+        {
+          "x": 404,
+          "y": 258,
+          "frame": 39,
+          "brightness": 18.11764705882353,
+          "area": 10.0
+        }
+      ],
+      "bbox": [
+        394,
+        207,
+        27,
+        61
+      ],
+      "length": 41.703061190350525,
+      "angle": 99.68878656036681,
+      "speed": 5.957580170050075,
+      "max_brightness": 18.11764705882353,
+      "quality_score": 74.25060774765802
+    }
+  ]
+}

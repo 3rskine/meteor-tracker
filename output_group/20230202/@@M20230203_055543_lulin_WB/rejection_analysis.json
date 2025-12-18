@@ -1,0 +1,17 @@
+{
+  "total_rejected": 1,
+  "rejection_reasons": {
+    "點數太少": 1
+  },
+  "sample_tracks": [],
+  "samples_by_reason": {
+    "點數太少": [
+      {
+        "track_id": 1,
+        "start_frame": 53,
+        "duration": 1,
+        "quality_score": 0
+      }
+    ]
+  }
+}

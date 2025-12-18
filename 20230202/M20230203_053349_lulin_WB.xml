@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ufocapture_record version="215" y="2023" mo="02" d="03" h="05" m="33" s="49.66" trig="1" frames="62" lng="120.8736" lat="23.4686" alt="2862.0" tz="28800" u2="224" cx="640" cy="480" fps="29.970" head="30" tail="30" diff="1" sipos="1" sisize="15" dlev="27" dsize="2" lid="lulin" observer="lulin_Observatory" sid="WB" cam="Watec902HU" lens="" cap="" comment="" interlace="1" bbf="0" dropframe="3">
+    <ufocapture_paths hit="2">
+     <uc_path fno="30" ono="12" pixel="2" bmax="126" x="126.5" y="395.0"></uc_path>
+     <uc_path fno="30" ono="11" pixel="10" bmax="250" x="125.7" y="267.2"></uc_path>
+    </ufocapture_paths>
+</ufocapture_record>

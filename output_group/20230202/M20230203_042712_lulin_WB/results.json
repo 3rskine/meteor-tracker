@@ -1,0 +1,63 @@
+{
+  "video": "20230202\\M20230203_042712_lulin_WB.avi",
+  "total_meteors": 1,
+  "fps": 29.97002997002997,
+  "sensitivity": "medium",
+  "quality_threshold": 10,
+  "light_trail_config": {
+    "length": 3,
+    "mode": "enhanced"
+  },
+  "scene_changes": [],
+  "meteors": [
+    {
+      "meteor_id": "meteor_000",
+      "frame_range": [
+        31,
+        34
+      ],
+      "duration_frames": 4,
+      "trajectory": [
+        {
+          "x": 12,
+          "y": 162,
+          "frame": 31,
+          "brightness": 13.25,
+          "area": 4.0
+        },
+        {
+          "x": 12,
+          "y": 160,
+          "frame": 32,
+          "brightness": 9.3,
+          "area": 5.0
+        },
+        {
+          "x": 13,
+          "y": 159,
+          "frame": 33,
+          "brightness": 13.875,
+          "area": 4.0
+        },
+        {
+          "x": 12,
+          "y": 160,
+          "frame": 34,
+          "brightness": 13.25,
+          "area": 4.0
+        }
+      ],
+      "bbox": [
+        2,
+        149,
+        21,
+        23
+      ],
+      "length": 4.82842712474619,
+      "angle": -90.0,
+      "speed": 1.6094757082487299,
+      "max_brightness": 13.875,
+      "quality_score": 67.5096583323627
+    }
+  ]
+}

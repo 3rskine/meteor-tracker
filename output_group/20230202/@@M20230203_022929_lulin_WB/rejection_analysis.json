@@ -1,0 +1,23 @@
+{
+  "total_rejected": 2,
+  "rejection_reasons": {
+    "持續時間太短 (2幀 < 3幀)": 2
+  },
+  "sample_tracks": [],
+  "samples_by_reason": {
+    "持續時間太短 (2幀 < 3幀)": [
+      {
+        "track_id": 0,
+        "start_frame": 2,
+        "duration": 2,
+        "quality_score": 0
+      },
+      {
+        "track_id": 3,
+        "start_frame": 62,
+        "duration": 2,
+        "quality_score": 0
+      }
+    ]
+  }
+}

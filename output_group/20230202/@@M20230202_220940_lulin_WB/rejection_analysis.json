@@ -1,0 +1,41 @@
+{
+  "total_rejected": 4,
+  "rejection_reasons": {
+    "點數太少": 1,
+    "靜止點 (0.0px)": 2,
+    "靜止點 (1.0px)": 1
+  },
+  "sample_tracks": [],
+  "samples_by_reason": {
+    "點數太少": [
+      {
+        "track_id": 0,
+        "start_frame": 5,
+        "duration": 1,
+        "quality_score": 0
+      }
+    ],
+    "靜止點 (0.0px)": [
+      {
+        "track_id": 1,
+        "start_frame": 19,
+        "duration": 3,
+        "quality_score": 0
+      },
+      {
+        "track_id": 4,
+        "start_frame": 42,
+        "duration": 3,
+        "quality_score": 0
+      }
+    ],
+    "靜止點 (1.0px)": [
+      {
+        "track_id": 5,
+        "start_frame": 56,
+        "duration": 3,
+        "quality_score": 0
+      }
+    ]
+  }
+}
